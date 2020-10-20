@@ -31,6 +31,7 @@ class Context:
 
 mainspace_context = Context()
 mainspace_context['print'] = print
+mainspace_context['none'] = None
 
 
 """

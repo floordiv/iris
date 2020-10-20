@@ -1,6 +1,3 @@
-import re
-
-
 def split(text, splitby=' ', skipby='"\'', skipby_close_is_same=True):
     """
     splits by ONE LETTER, but you can set multiple, and it will split it by them
@@ -27,15 +24,45 @@ def split(text, splitby=' ', skipby='"\'', skipby_close_is_same=True):
     return result
 
 
-def parse_function_call(funcall):
+def split_arguments(args):
+    opened_braces = 0
+    result = ['']
+    in_string = False
+    prev_string_opener = None
+
+    for letter in args:
+        if letter in tuple('"\''):
+            if not in_string:
+                in_string = True
+                prev_string_opener = letter
+            elif prev_string_opener == letter:
+                in_string = False
+
+        if letter == '(':
+            opened_braces += 1
+        elif letter == ')':
+            opened_braces -= 1
+
+        if letter == ',' and opened_braces <= 0 and not in_string:
+            result.append('')
+        else:
+            result[-1] += letter
+
+    if result[-1] == '':
+        result = result[:-1]
+
+    return result
+
+
+def parse_function_call(funcall, special_characters):
     funcname, funcargs = funcall.split('(', maxsplit=1)
     funcargs = funcargs.rstrip(')')
 
-    return (funcname, *parse_args(funcargs))
+    return (funcname, *parse_args(funcargs, special_characters))
 
 
-def parse_args(string):
-    raw = parse_func_call_args(string)
+def parse_args(string, special_characters):
+    raw = parse_func_call_args(string, special_characters)
     args = []
     kwargs = {}
 
@@ -49,17 +76,23 @@ def parse_args(string):
     return args, kwargs
 
 
-def parse_func_call_args(args, raise_err_if_kwarg=None):
+def parse_func_call_args(args, special_characters, raise_err_if_kwarg=None):
     """
     returns RAW (without datatypes) function arguments
     """
 
-    funcargs = split(args, ',')
-    kwarg_pattern = re.compile(r'[^\d]\w*=.+')
+    funcargs = split_arguments(args)
     result = []
 
     for arg in funcargs:
-        if kwarg_pattern.match(arg):
+        if '=' in arg:
+            first_eq_index = arg.find('=')
+
+            if arg[first_eq_index - 1] in special_characters or arg[first_eq_index + 1] in special_characters \
+                    or '(' in arg[:first_eq_index]:
+                result.append(arg)
+                continue
+
             if raise_err_if_kwarg is not None:
                 raise raise_err_if_kwarg('kwargs not allowed!')
 
@@ -67,7 +100,7 @@ def parse_func_call_args(args, raise_err_if_kwarg=None):
         else:
             result.append(arg)
 
-    if result[-1] == '':
+    if result and result[-1] == '':
         result = result[:-1]
 
     return result
@@ -77,4 +110,4 @@ def parse_kwarg(kwarg):
     return kwarg.split('=', maxsplit=1)
 
 
-# print(parse_function_call('someFunc(args,arg2="ok,got")'))
+# print(split_arguments('a(hello,world),ok,"ok,baby!"'))

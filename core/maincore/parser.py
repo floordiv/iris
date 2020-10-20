@@ -1,11 +1,10 @@
-from iris.core.maincore.priority import OPERATORS_PRIORITY, HIGH
-from iris.core.maincore.tokentypes import (PRIMITIVE, NUMBER, VARIABLE,
-                                           OPERATOR, PARENTHESIS, FCALL,
-                                           TUPLE, LIST, STRING, OBJECT, OTHER, types2py)
-from iris.core.maincore.textutils import parse_args
-
 from string import punctuation as punctuation_chars
 
+from iris.core.maincore.priority import OPERATORS_PRIORITY, HIGH
+from iris.core.maincore.textutils import parse_args
+from iris.core.maincore.tokentypes import (PRIMITIVE, NUMBER, VARIABLE,
+                                           OPERATOR, PARENTHESIS, FCALL,
+                                           STRING, OBJECT, OTHER, types2py)
 
 punctuation = punctuation_chars.replace('.', '').replace('_', '')    # dot and underline are valid chars
 
@@ -133,7 +132,8 @@ class Parser:
                     raw_function_args_kwargs, skip_iters = self.get_array_ending(expr[index:], '(', ')')
 
                     name = tokens[-1].value
-                    args, kwargs = parse_args(raw_function_args_kwargs)
+                    args, kwargs = parse_args(raw_function_args_kwargs, SPECIAL_CHARACTERS)
+
                     args_as_tokens = [self.execute(arg, return_token=True) for arg in args]
                     kwargs_as_tokens = dict([(kw_var, self.execute(kw_val, return_token=True)) for kw_var, kw_val in kwargs.items()])
 
@@ -360,5 +360,3 @@ class Parser:
 
 
 parser = Parser()
-
-# print(type(parser.execute('ok', context={'ok': 5})))

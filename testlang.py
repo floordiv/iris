@@ -4,11 +4,11 @@ from iris.core.interpreter import interpret
 
 
 code = """
-func test(second_call=0) {
-    print(second_call, "hi there!");
+func test(second_call=none) {
+    print("hi there! second_call kwarg's value is:", second_call);
  
     if (second_call) {
-        print(second_call, 'Second call, baby!');
+        print('Second call, baby!');
         return 3;
     };
     
@@ -16,7 +16,26 @@ func test(second_call=0) {
 };
 
 a = test();
-print(a(second_call=1));
+print("Function in the second time returned", a(second_call=1));
+print("a==5 is", a==5);
 """
 
-print('timeit:', timeit('interpret(code)', globals={'code': code, 'interpret': interpret}, number=1))
+code2 = """
+func hello_world(additional_string=none) {
+  print('Hello, world!', end=' ');
+  
+  if (additional_string) {
+    print(additional_string);
+  }; else {
+    print();
+  };
+};
+
+var = hello_world();
+
+if (var === none) {
+  print('Yes, hello!');
+};
+"""
+
+# print('timeit:', timeit('interpret(code)', globals={'code': code, 'interpret': interpret}, number=1))

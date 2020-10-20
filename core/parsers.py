@@ -1,5 +1,5 @@
 from iris.core.blocks import Token
-from iris.core.maincore.parser import parser
+from iris.core.maincore.parser import parser, SPECIAL_CHARACTERS
 from iris.core.maincore.textutils import parse_function_call, parse_func_call_args
 from iris.core.constants import RETURN_TOKEN, BREAK_TOKEN, CONTINUE_TOKEN, SKIPITER_TOKEN, EXPRESSION
 
@@ -37,7 +37,7 @@ def func_assign_parser(raw):
     half_cooked = raw[5:-1]
     func, body = half_cooked.split('{', maxsplit=1)
 
-    return (*parse_function_call(func), body)
+    return (*parse_function_call(func, SPECIAL_CHARACTERS), body)
 
 
 def class_assign_parser(raw):
@@ -73,7 +73,7 @@ class TokenParser:
                 operator_args = raw[len(operator):].lstrip()
 
                 if operator_args:
-                    operator_args = parse_func_call_args(operator_args, raise_err_if_kwarg=SyntaxError)
+                    operator_args = parse_func_call_args(operator_args, SPECIAL_CHARACTERS, raise_err_if_kwarg=SyntaxError)
 
                     for index, arg in enumerate(operator_args):
                         operator_args[index] = parser.execute(arg, context=context)
