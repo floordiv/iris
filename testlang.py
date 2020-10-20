@@ -17,25 +17,8 @@ func test(second_call=none) {
 
 a = test();
 print("Function in the second time returned", a(second_call=1));
-print("a==5 is", a==5);
+print("a == 5 is", a == 5);
 """
 
-code2 = """
-func hello_world(additional_string=none) {
-  print('Hello, world!', end=' ');
-  
-  if (additional_string) {
-    print(additional_string);
-  }; else {
-    print();
-  };
-};
-
-var = hello_world();
-
-if (var === none) {
-  print('Yes, hello!');
-};
-"""
-
+interpret(code)
 # print('timeit:', timeit('interpret(code)', globals={'code': code, 'interpret': interpret}, number=1))

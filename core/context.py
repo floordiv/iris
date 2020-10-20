@@ -1,6 +1,9 @@
+from iris.lib.built import pybindings
+
+
 class Context:
     def __init__(self):
-        self.variables = {}
+        self.variables = pybindings
 
     def new(self, name, value):
         self.variables[name] = value
@@ -30,8 +33,6 @@ class Context:
 
 
 mainspace_context = Context()
-mainspace_context['print'] = print
-mainspace_context['none'] = None
 
 
 """
