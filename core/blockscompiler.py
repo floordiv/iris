@@ -1,6 +1,5 @@
 from re import compile
 
-from iris.core.context import mainspace_context, Context
 from iris.core.parsers import (if_expr_parser, elif_expr_parser, else_expr_parser,
                                func_assign_parser, class_assign_parser, var_assign_parser,
                                TokenParser)
@@ -72,9 +71,3 @@ def compile_block(eid, raw, context, executor):
         return block(eid, *parsed)
     else:
         return block(eid, parsed)
-
-
-def build_context_tree(blocks: list):
-    """
-    blocks: list with compiled blocks
-    """

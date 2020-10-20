@@ -11,6 +11,8 @@ LIST = 'list'
 FCALL = 'function_call'
 OBJECT = 'object'
 
+OTHER = 'other'
+
 types2py = {
     int: NUMBER,
     float: NUMBER,

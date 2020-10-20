@@ -4,25 +4,19 @@ from iris.core.interpreter import interpret
 
 
 code = """
-func hello_world() {
-    func out(string, second="ok") {  // just a wrapper to test nested functions
-        print(string, second);
-        //print(second);
+func test(second_call=0) {
+    print(second_call, "hi there!");
+ 
+    if (second_call) {
+        print(second_call, 'Second call, baby!');
+        return 3;
     };
-    out('Hello, world!');
-
-    return 1;
+    
+    return test;
 };
 
-a = hello_world();
-
-if (a == 5) {
-    out("a equals 5");
-}; elif (a == 6) {
-    out("a equals 6");
-}; else {
-    out("a equals", second=a);
-};
+a = test();
+print(a(second_call=1));
 """
 
 print('timeit:', timeit('interpret(code)', globals={'code': code, 'interpret': interpret}, number=1))

@@ -1,7 +1,7 @@
-from iris.core.maincore.priority import OPERATORS_PRIORITY, MINIMAL, MEDIUM, HIGH, MAXIMAL
+from iris.core.maincore.priority import OPERATORS_PRIORITY, HIGH
 from iris.core.maincore.tokentypes import (PRIMITIVE, NUMBER, VARIABLE,
                                            OPERATOR, PARENTHESIS, FCALL,
-                                           TUPLE, LIST, STRING, OBJECT, types2py)
+                                           TUPLE, LIST, STRING, OBJECT, OTHER, types2py)
 from iris.core.maincore.textutils import parse_args
 
 from string import punctuation as punctuation_chars
@@ -223,8 +223,12 @@ class Parser:
 
     def process_token(self, token) -> Token:
         if token.type == VARIABLE:
-            token.type = NUMBER
             token.value = self.context[token.value]
+
+            if token.value in types2py:
+                token.type = types2py[type(token.value)]
+            else:
+                token.type = OTHER
 
             return self.process_token_unary(token)
         if token.type in (FCALL, STRING):
@@ -245,7 +249,7 @@ class Parser:
         return token
 
     def process_token_unary(self, token) -> Token:
-        if not token.processed:
+        if not token.processed and token.type == NUMBER:
             token.processed = True
             token.value *= token.unary
 
@@ -357,4 +361,4 @@ class Parser:
 
 parser = Parser()
 
-# print(parser.execute('hello(world="no")'))
+# print(type(parser.execute('ok', context={'ok': 5})))

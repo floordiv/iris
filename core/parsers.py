@@ -36,7 +36,7 @@ def func_assign_parser(raw):
     
     half_cooked = raw[5:-1]
     func, body = half_cooked.split('{', maxsplit=1)
-    
+
     return (*parse_function_call(func), body)
 
 
@@ -70,13 +70,16 @@ class TokenParser:
     def parse(self, eid, raw, context):
         for operator, operator_type in self.operators.items():
             if raw.startswith(operator):
-                operator_args = raw[len(operator):]
+                operator_args = raw[len(operator):].lstrip()
 
                 if operator_args:
                     operator_args = parse_func_call_args(operator_args, raise_err_if_kwarg=SyntaxError)
 
                     for index, arg in enumerate(operator_args):
                         operator_args[index] = parser.execute(arg, context=context)
+
+                    if len(operator_args) == 1:
+                        operator_args = operator_args[0]
 
                 return Token(eid, operator_type, operator_args or None)
 

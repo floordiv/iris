@@ -99,10 +99,14 @@ class Function:
     def __init__(self, eid, name, args, kwargs, body, context, block_executor):
         self.eid = eid
         self.name = name
-        self.args, self.kwargs = args, kwargs
+        self.args = args
+        self.kwargs = {}
         self.body = body
         self.context = context
         self.executor = block_executor
+
+        for kw_var, kw_val in kwargs.items():
+            self.kwargs[kw_var] = parser.execute(kw_val, context=context)
 
         self.type = FUNCTION
 
@@ -121,11 +125,7 @@ class Function:
 
             self.context[kw_var] = kw_val
 
-        for block in self.body:
-            if block.type == RETURN_TOKEN:
-                return parser.execute(str(block.value[0]), context=self.context)
-
-            self.executor(block, self.context)
+        return self.executor(self.body)
 
     def __str__(self):
         return f'Function(eid={self.eid}, name={repr(self.name)}, args={self.args}, kwargs={self.kwargs})'
