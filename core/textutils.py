@@ -34,8 +34,8 @@ def remove_spaces(line):
     in_string = False
     prev_string_opener = None
 
-    for letter in line:
-        if letter in ('"', "'"):
+    for index, letter in enumerate(line):
+        if letter in ('"', "'") and line[index - 1] != '\\':
             if in_string and letter == prev_string_opener:
                 in_string = False
             elif not in_string:

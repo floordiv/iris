@@ -25,29 +25,3 @@ def compose(source):
             composed += remove_spaces(remove_comment(line))
 
     return composed
-
-
-code = """
-// short example of the lang
-
-func hello_world() {
-    func out(string) {
-        print(string);
-    };
-    out('Hello, world!');
-    
-    return 5;
-};
-
-a = hello_world();
-
-if (a == 5) {
-    out("a equals 5");
-}; elif (a == 6) {
-    out("a equals 6");
-}; else {
-    out("a equals", a);
-};
-"""
-
-# print(compose(code))

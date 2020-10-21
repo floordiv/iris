@@ -1,0 +1,15 @@
+func hello_world(additional_string=none) {
+  print('Hello, world!', end=' ');
+
+  if (additional_string) {
+    print(additional_string);
+  }; else {
+    print();
+  };
+};
+
+var = hello_world();
+
+if (var === none) {
+  print('Yes, hello!');
+};

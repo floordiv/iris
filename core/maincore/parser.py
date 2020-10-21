@@ -279,10 +279,10 @@ class Parser:
 
     def get_string_ending(self, string: str) -> (str, int):
         for index, letter in enumerate(string[1:], start=1):
-            if letter == string[0]:  # if letter is string opener
-                return string[1:index], index
+            if letter == string[0] and string[index - 1] != '\\':  # if letter is string opener
+                return string[1:index].replace('\\\'', '\''), index
 
-        return string[1:-1], len(string) - 1
+        return string[1:-1].replace('\\\'', '\''), len(string) - 1
 
     def process_kwargs(self, kwargs: dict) -> None:
         for var, val in kwargs.items():
