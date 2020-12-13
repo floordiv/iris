@@ -26,4 +26,4 @@ if (var === none) {
 ```
 
 ---
-UPD: unmaintained anymore. Architecture and code are full shit. [Here is an actual implemention](github.com/floordiv/lily)
+UPD: unmaintained anymore. Architecture and code are full shit. [Here is an actual implemention](https://github.com/floordiv/lily)
