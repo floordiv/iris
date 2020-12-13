@@ -24,3 +24,6 @@ if (var === none) {
   print('Yes, hello!');
 };
 ```
+
+---
+UPD: unmaintained anymore. Architecture and code are full shit. [Here is an actual implemention](github.com/floordiv/lily)
